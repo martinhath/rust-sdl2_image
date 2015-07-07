@@ -2,7 +2,7 @@ use std::path::Path;
 use sdl2;
 use sdl2_image::{self, LoadTexture, INIT_PNG, INIT_JPG};
 use sdl2::event::Event;
-use sdl2::keycode::KeyCode;
+use sdl2::keyboard::Keycode;
 
 pub fn main(png: &Path) {
 
@@ -18,15 +18,14 @@ pub fn main(png: &Path) {
     let mut texture = renderer.load_texture(png).unwrap();
 
     // Draws and shows the loaded texture.
-    let mut drawer = renderer.drawer();
-    drawer.copy(&mut texture, None, None);
-    drawer.present();
+    renderer.copy(&mut texture, None, None);
+    renderer.present();
 
     'mainloop: loop {
         for event in context.event_pump().poll_iter() {
             match event {
                 Event::Quit{..} |
-                Event::KeyDown {keycode: KeyCode::Escape, ..} =>
+                Event::KeyDown {keycode: Some(Keycode::Escape), ..} =>
                     break 'mainloop,
                 _ => {}
             }
